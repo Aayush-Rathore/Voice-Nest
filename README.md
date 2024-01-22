@@ -1,81 +1,108 @@
-# Turborepo starter
+# Voice Nest
 
-This is an official starter Turborepo.
+Voice Nest is a social media platform that allows users to connect, share media, and engage with each other through various forms of content such as songs, posts, and blogs.
 
-## Using this example
+## Table of Contents
 
-Run the following command:
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Models](#models)
+- [Contributing](#contributing)
+- [License](#license)
 
-```sh
-npx create-turbo@latest
-```
+## Features
 
-## What's inside?
+- **User Authentication**: Secure user authentication with unique usernames and emails.
+- **User Network**: Track the number of followers and following relationships between users.
+- **User Media**: Share and engage with different types of media including songs, posts, and blogs.
+- **Likes and Comments**: Users can express appreciation by liking and commenting on songs, posts, and blogs.
 
-This Turborepo includes the following packages/apps:
+## Getting Started
 
-### Apps and Packages
+### Prerequisites
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Before you begin, ensure you have the following installed:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- [Node.js](https://nodejs.org/)
+- [MongoDB](https://www.mongodb.com/try/download/community)
 
-### Utilities
+### Installation
 
-This Turborepo has some additional tools already setup for you:
+1. Clone the repository:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+   ```bash
+   git clone https://github.com/your-username/voice-nest.git
+   ```
 
-### Build
+2. Install dependencies:
 
-To build all apps and packages, run the following command:
+   ```bash
+   cd voice-nest
+   npm install
+   ```
 
-```
-cd my-turborepo
-pnpm build
-```
+3. Set up your MongoDB database and update the configuration in `config.js`.
 
-### Develop
+4. Start the application:
 
-To develop all apps and packages, run the following command:
+   ```bash
+   npm start
+   ```
 
-```
-cd my-turborepo
-pnpm dev
-```
+5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to access Voice Nest.
 
-### Remote Caching
+## Usage
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- Register an account and log in to start using Voice Nest.
+- Explore and connect with other users.
+- Share songs, posts, and blogs.
+- Like and comment on content from other users.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+## Models
 
-```
-cd my-turborepo
-npx turbo login
-```
+### User Credentials
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+- `username`: Unique username for the user.
+- `email`: Unique email address for the user.
+- `password`: Securely hashed password for the user.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### User Network
 
-```
-npx turbo link
-```
+- `numberOfFollowers`: Count of followers for a user.
+- `numberOfFollowing`: Count of users being followed by a user.
+- `following`: Array of users being followed by the user.
+- `followers`: Array of users who are followers of the user.
 
-## Useful Links
+### User Media
 
-Learn more about the power of Turborepo:
+#### Songs
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- `title`: Title of the song.
+- `artist`: Artist of the song.
+- `likes`: Users who liked the song.
+- `comments`: Users who commented on the song.
+
+#### Posts
+
+- `url`: URL of the post.
+- `description`: Description of the post.
+- `likes`: Users who liked the post.
+- `comments`: Users who commented on the post.
+
+#### Blogs
+
+- `title`: Title of the blog.
+- `content`: Content of the blog.
+- `likes`: Users who liked the blog.
+- `comments`: Users who commented on the blog.
+
+## Contributing
+
+Contributions are welcome! Please follow our [contribution guidelines](CONTRIBUTING.md).
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
