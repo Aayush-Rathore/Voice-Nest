@@ -1,11 +1,6 @@
-const express = require("express");
-const app = express();
-const PORT: number = 8000;
+import dotenv from "dotenv";
+import connectDB from "./database/db";
 
-app.get("/", (req: object, res: any) => {
-  res.send("This will be the Back-End of the application");
-});
+dotenv.config();
 
-app.listen(PORT, () => {
-  console.log(`server in runing on port ${PORT}`);
-});
+connectDB();
