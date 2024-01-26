@@ -1,4 +1,4 @@
-export const PORT: number = 8000;
+export const PORT: number = 8005;
 export const DB_Name: string = "voice-nest";
 export const SALT_Rounds = 7;
 export const ACCESS_TOKEN_KEY =

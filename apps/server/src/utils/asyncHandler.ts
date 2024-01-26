@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 
-const asyncHandler =
-  (fun: (req: Request, res: Response, next: NextFunction) => Promise<void>) =>
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+const asyncHandler = (
+  fun: (req: Request, res: Response, next: NextFunction) => Promise<void>
+) => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     try {
       await fun(req, res, next);
     } catch (error: any) {
@@ -12,5 +17,5 @@ const asyncHandler =
       });
     }
   };
-
+};
 export { asyncHandler };
