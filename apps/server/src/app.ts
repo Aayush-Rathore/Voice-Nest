@@ -31,4 +31,12 @@ app.use(express.static("pulic"));
 
 app.use(cookieParser());
 
-export = { app };
+// import routes
+
+import userRouter from "./routes/user.routes";
+import { PORT } from "./constants/constants.variable";
+
+// using users routes {SignIn, SignUp}
+app.use("/api/v1/users", userRouter);
+
+export default app;
