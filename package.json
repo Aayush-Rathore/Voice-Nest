@@ -20,5 +20,10 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@tanstack/react-query": "^5.18.1",
+    "@types/body-parser": "^1.19.5",
+    "body-parser": "^1.20.2"
+  }
 }

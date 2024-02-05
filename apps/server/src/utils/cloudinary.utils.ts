@@ -1,8 +1,5 @@
 import { v2 } from "cloudinary";
 import fs from "fs";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 v2.config({
   cloud_name: process.env.CLOUD_STORAGE_NAME,
@@ -21,7 +18,7 @@ const uploadFileToCloud = async (localFilePath: string) => {
   } catch (error: any) {
     return "Unable to upload file!";
   } finally {
-    fs.unlinkSync(localFilePath); // clear file storeted on server tem.
+    fs.unlinkSync(localFilePath); // clear file storeyed on server tem.
   }
 };
 

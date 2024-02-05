@@ -1,13 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import {
-  SALT_Rounds,
-  ACCESS_TOKEN_KEY,
-  ACCESS_TOKEN_EXPIRY,
-  REFRESH_TOKEN_KEY,
-  REFRESH_TOKEN_EXPIRY,
-} from "../constants/constants.variable";
 import jwt from "jsonwebtoken";
+import { SALT_ROUND } from "../constants/constants.variable";
 
 const userSchema = new Schema(
   {
@@ -35,11 +29,6 @@ const userSchema = new Schema(
       required: [true, "Email is required!"],
     },
 
-    dob: {
-      type: Date,
-      required: [true, "Date of birth is required!"],
-    },
-
     profileUrl: {
       type: String,
     },
@@ -50,15 +39,20 @@ const userSchema = new Schema(
 
     posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
 
-    followers: [{ type: Schema.Types.ObjectId, ref: "Followers" }],
+    followers: { type: Schema.Types.ObjectId, ref: "Followers" },
 
-    following: [{ type: Schema.Types.ObjectId, ref: "Following" }],
+    following: { type: Schema.Types.ObjectId, ref: "Following" },
 
     music: [{ type: Schema.Types.ObjectId, ref: "Music" }],
 
     password: {
       type: String,
       required: [true, "Password is required!"],
+    },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
 
     refreshToken: {
@@ -69,9 +63,10 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  if (this.isModified(this.password)) {
-    this.password = await bcrypt.hash(this.password, SALT_Rounds);
-  }
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, SALT_ROUND);
+
   next();
 });
 
@@ -86,9 +81,9 @@ userSchema.methods.generateAccessToken = async function () {
       email: this.email,
       username: this.username,
     },
-    REFRESH_TOKEN_KEY,
+    process.env.REFRESH_TOKEN_KEY,
     {
-      expiresIn: REFRESH_TOKEN_EXPIRY,
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     }
   );
 };
@@ -96,11 +91,11 @@ userSchema.methods.generateAccessToken = async function () {
 userSchema.methods.generateRefreshToken = async function () {
   return await jwt.sign(
     {
-      _id: this._id,
+      id: this._id,
     },
-    ACCESS_TOKEN_KEY,
+    process.env.REFRESH_TOKEN_KEY,
     {
-      expiresIn: ACCESS_TOKEN_EXPIRY,
+      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     }
   );
 };
