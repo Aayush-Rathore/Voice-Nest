@@ -13,6 +13,8 @@ declare global {
       ACCESS_TOKEN_EXPIRY: string;
       REFRESH_TOKEN_KEY: string;
       REFRESH_TOKEN_EXPIRY: string;
+      TEMP_TOKEN_KEY: string;
+      TEMP_TOKEN_EXPIRY: string;
       EMAIL: string;
       PASS: string;
       NODE_ENV: "development" | "production";

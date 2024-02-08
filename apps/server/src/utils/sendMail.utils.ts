@@ -11,13 +11,21 @@ const transporter = nodemailer.createTransport({
   secure: true,
 });
 
-const sendMail = async (fullName: string, email: string, token: string) => {
+const sendMail = async (
+  fullName: string,
+  email: string,
+  subject: string,
+  token: string
+) => {
   const mail = {
     from: "Voice Nest community",
     to: email,
-    subject: "Verify Your Email Address for Voice Nest",
+    subject: subject,
     test: `Dear ${fullName}`,
-    html: `<b>Welcome to Voice Nest!</b><br>We're excited to have you join our community.<br><p>To get started, Please varify your email address by clicking the link below:<br><a href='http://localhost:3000/api/v1/users/varifyEmail/${token}'>Click here to varify</a></p>`,
+    html:
+      subject === "Verify Your Email Address for Voice Nest"
+        ? `<b>Welcome to Voice Nest!</b><br>We're excited to have you join our community.<br><p>To get started, Please verify your email address by clicking the link below:<br><a href='http://localhost:3000/api/v1/users/varifyEmail/${token}'>Click here to verify</a></p>`
+        : `<b>Welcome to Voice Nest!</b><br>To change you password for your Voice Nest account click the link below.<br><p>Please click this link to change your password:<br><a href='http://localhost:3000/api/v1/users/resetPassword/${token}'>Click here to reset</a></p>`,
   };
   try {
     const mailStatus = await transporter.sendMail(mail);
@@ -31,8 +39,5 @@ const sendMail = async (fullName: string, email: string, token: string) => {
     );
   }
 };
-
-// http://localhost:3000/users/varifyEmail/:token
-// param.token
 
 export default sendMail;
