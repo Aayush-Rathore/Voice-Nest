@@ -4,13 +4,14 @@ import { validationResult, Result, ValidationError } from "express-validator";
 import sendMail from "../utils/sendMail.utils";
 import { User } from "../models/userSchema.models";
 import ApiResponse from "../utils/apiResponse.utils";
+import changePassword from "../utils/changePassword.utils";
 
 // Generate Access and Refresh token together
 const generateAccessAndRefreshToken = async (userId: string) => {
   try {
     const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -107,10 +108,6 @@ export const SignIn = async (req: Request, res: Response): Promise<void> => {
 
   const checkPass = await user.matchPassword(password);
 
-  const logedInUser = await User.findById(user._id).select(
-    "-password -isVerified"
-  );
-
   if (!checkPass)
     throw new ApiError(
       401,
@@ -118,6 +115,9 @@ export const SignIn = async (req: Request, res: Response): Promise<void> => {
       "Check your Username or Email and try again!"
     );
 
+  const logedInUser = await User.findById(user._id).select(
+    "-password -isVerified -refreshToken"
+  );
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id
   );
@@ -129,15 +129,61 @@ export const SignIn = async (req: Request, res: Response): Promise<void> => {
 
   res
     .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        "SUCCESSFULLY_LOGED_IN!",
-        `Welcome to Voice Nest ${logedInUser.fullName}`,
-        [logedInUser, accessToken, refreshToken],
-        res
-      )
+    .cookie("refreshToken", refreshToken, options);
+
+  new ApiResponse(
+    200,
+    "SUCCESSFULLY_LOGED_IN!",
+    `Welcome to Voice Nest ${logedInUser.fullName}`,
+    { logedInUser, accessToken, refreshToken },
+    res
+  );
+};
+
+// Update Password Functionality completed
+export const UpdatePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const result: Result<ValidationError> = validationResult(req);
+
+  if (!result.isEmpty()) {
+    throw new ApiError(
+      401,
+      "VALIDATION_ERROR!",
+      "User validation error",
+      result.array()
+    );
+  }
+
+  const {
+    oldPassword,
+    newPassword,
+    id,
+  }: { oldPassword: string; newPassword: string; id: string } = req.body;
+
+  if (oldPassword === newPassword)
+    throw new ApiError(
+      304,
+      "NOT_MODIFIED",
+      "Old and new password, both are same! Please try with different password!"
+    );
+
+  const isPasswordChanged: Boolean = await changePassword(
+    id,
+    oldPassword,
+    newPassword
+  );
+
+  if (isPasswordChanged)
+    new ApiResponse(
+      200,
+      "SUCCESS!",
+      "Password changed successfully!",
+      {
+        message: "Your new password is updated successfully",
+      },
+      res
     );
 };
 
@@ -169,11 +215,11 @@ export const ForgetPassword = async (
   if (!user?.isVerified)
     throw new ApiError(
       402,
-      "WRONG_CREDENTIALS!",
+      "VALIDATION_ERROR!",
       "Email is not verified!\n Verify your email before resetting your password!"
     );
 
-  const token: string = user.tempToken();
+  const token: string = await user.tempToken();
   const { fullName, email } = user;
   sendMail(fullName, email, "Change your password!", token);
 
@@ -189,11 +235,47 @@ export const ForgetPassword = async (
   );
 };
 
+// Reset Password Functionality completed
 export const ResetPassword = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const { newPassword }: { newPassword: string } = req.body;
-  console.log(newPassword);
-  res.send(newPassword);
+  const result: Result<ValidationError> = validationResult(req);
+
+  if (!result.isEmpty()) {
+    throw new ApiError(
+      401,
+      "VALIDATION_ERROR!",
+      "User validation error",
+      result.array()
+    );
+  }
+
+  const {
+    newPassword,
+    userId,
+  }: { newPassword: string; userId: { id: string } } = req.body;
+
+  const user = await User.findById(userId.id);
+
+  const isPasswordNotModified: Boolean = await user.matchPassword(newPassword);
+  if (isPasswordNotModified)
+    throw new ApiError(
+      304,
+      "NOT_MODIFIED!",
+      "Password is same as old one, Try with another password!"
+    );
+
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  new ApiResponse(
+    200,
+    "SUCCESS!",
+    "Password changed successfully!",
+    {
+      message: "Your new password is updated successfully",
+    },
+    res
+  );
 };

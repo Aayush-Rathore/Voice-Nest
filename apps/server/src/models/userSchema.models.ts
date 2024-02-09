@@ -75,7 +75,7 @@ userSchema.methods.matchPassword = async function (password: string) {
 };
 
 userSchema.methods.tempToken = async function () {
-  return await jwt.sign({ _id: this.id }, process.env.TEMP_TOKEN_KEY, {
+  return await jwt.sign({ id: this.id }, process.env.TEMP_TOKEN_KEY, {
     expiresIn: process.env.TEMP_TOKEN_EXPIRY,
   });
 };
@@ -83,7 +83,7 @@ userSchema.methods.tempToken = async function () {
 userSchema.methods.generateAccessToken = async function () {
   return await jwt.sign(
     {
-      _id: this._id,
+      id: this._id,
       email: this.email,
       username: this.username,
     },

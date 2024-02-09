@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { verify, JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import ApiError from "./apiError.utils";
 import ApiResponse from "./apiResponse.utils";
 import { User } from "../models/userSchema.models";
+import { verifyRefreshToken } from "./verifyTokens.utils";
 
 export const verifyEmail = async (
   req: Request,
@@ -15,7 +16,7 @@ export const verifyEmail = async (
       "EMAIL_VERIFICATION_FAILED!",
       "Please request for the verification mail again!"
     );
-  const verifyUser: JwtPayload | string = await verifyToken(token).catch(
+  const verifyUser: JwtPayload | string = await verifyRefreshToken(token).catch(
     (error) => {
       throw new ApiError(401, error.message, "Invalid verification url!");
     }
@@ -37,8 +38,4 @@ export const verifyEmail = async (
     verifyUser,
     res
   );
-};
-
-const verifyToken = async (token: string) => {
-  return await verify(token, process.env.REFRESH_TOKEN_KEY);
 };
