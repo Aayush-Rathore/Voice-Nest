@@ -279,3 +279,33 @@ export const ResetPassword = async (
     res
   );
 };
+
+// LogOut Functionality completed
+export const LogOut = async (req: Request, res: Response): Promise<void> => {
+  const { user }: { user: { id: string } } = req.body;
+  await User.findByIdAndUpdate(
+    user.id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = { httpOnly: true, secure: true };
+
+  res.clearCookie("accessToken", options).clearCookie("refreshToken", options);
+
+  new ApiResponse(
+    200,
+    "USER_LOGED_OUT",
+    "User loged out successfully!",
+    {
+      message: "Logout successfully!",
+    },
+    res
+  );
+};

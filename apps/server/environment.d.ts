@@ -15,6 +15,8 @@ declare global {
       REFRESH_TOKEN_EXPIRY: string;
       TEMP_TOKEN_KEY: string;
       TEMP_TOKEN_EXPIRY: string;
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
       EMAIL: string;
       PASS: string;
       NODE_ENV: "development" | "production";
