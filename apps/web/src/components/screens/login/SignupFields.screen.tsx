@@ -18,21 +18,21 @@ export default function SignupFields() {
           type="text"
           id="fullName"
           placeholder="Enter Your FullName"
-          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0  shadow-slate-200/70 placeholder:text-xs text-black font-thin"
+          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0 font-extrabold	0  shadow-slate-200/70 placeholder:text-xs text-black font-semibold	"
           onChange={(e) => console.log(e?.target.value)}
         />
         <Input
           type="text"
           id="userName"
           placeholder="Enter Your Username"
-          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0  shadow-slate-200/70 placeholder:text-xs text-black font-thin"
+          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0 font-extrabold  shadow-slate-200/70 placeholder:text-xs text-black font-semibold	"
           onChange={(e) => console.log(e?.target.value)}
         />
         <Input
           type="email"
           id="email"
           placeholder="Enter Email"
-          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0  shadow-slate-200/70 placeholder:text-xs text-black font-thin"
+          className="block w-full py-1 h-auto px-2 bg-white-300 outline-none rounded-sm shadow-lg focus-visible:ring-0 font-extrabold  shadow-slate-200/70 placeholder:text-xs text-black font-semibold	"
           onChange={(e) => console.log(e?.target.value)}
         />
 
@@ -41,7 +41,7 @@ export default function SignupFields() {
             type={isPasswordVisible ? "text" : "password"}
             placeholder="Enter your Password"
             id="password"
-            className="block w-full py-1 px-2 h-auto bg-white-300 outline-none rounded-sm shadow-lg shadow-slate-200/70 placeholder:text-xs text-black font-thin focus-visible:ring-0"
+            className="block w-full py-1 px-2 h-auto bg-white-300 outline-none rounded-sm shadow-lg shadow-slate-200/ font-extrabold placeholder:text-xs text-black font-semibold	 focus-visible:ring-0"
             onChange={(e) => console.log(e?.target.value)}
           />
           {isPasswordVisible ? (
